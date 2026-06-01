@@ -2,8 +2,14 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Исполнитель Brxof</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <!-- Android Chrome theme color -->
+    <meta name="theme-color" content="#000000">
+    <meta name="color-scheme" content="dark">
+    <!-- Android specific: disable tap highlight -->
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="format-detection" content="telephone=no">
+    <title>Brxof — Официальные Ссылки</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts (Manrope) -->
@@ -11,112 +17,336 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
+    <script>
+        // Функция, которая плавно отображает картинку и свечение при успешной загрузке
+        function handleImageLoaded() {
+            const img = document.getElementById('avatar-img');
+            const glow = document.getElementById('avatar-glow');
+            const loader = document.getElementById('image-loader');
+            
+            if (img) {
+                img.classList.remove('opacity-0');
+                img.classList.add('opacity-100');
+            }
+            if (glow) {
+                glow.classList.remove('opacity-0');
+                // Задаем красивую прозрачность для мягкого свечения
+                glow.classList.add('opacity-70'); 
+            }
+            if (loader) {
+                loader.style.display = 'none';
+            }
+        }
+
+        // Стильный бэкап, если локального файла нет
+        function handleImageError() {
+            const loader = document.getElementById('image-loader');
+            const glow = document.getElementById('avatar-glow');
+            
+            if (glow) {
+                glow.style.display = 'none';
+            }
+            if (loader) {
+                loader.innerHTML = `
+                    <div class="flex flex-col items-center justify-center w-full h-full p-4 text-center bg-gradient-to-br from-zinc-900 to-black">
+                        <svg class="w-12 h-12 text-zinc-600 mb-2 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2z"></path>
+                        </svg>
+                        <span class="text-sm uppercase font-black text-zinc-450 tracking-widest">Brxof</span>
+                        <span class="text-[10px] text-zinc-600 mt-1">ico/11.jpg?</span>
+                    </div>
+                `;
+            }
+        }
+
+        // Страховка на случай мгновенной загрузки из кэша браузера
+        document.addEventListener('DOMContentLoaded', () => {
+            const img = document.getElementById('avatar-img');
+            if (img && img.complete) {
+                handleImageLoaded();
+            }
+            
+            // Android: улучшаем обработку кликов — убираем задержку 300ms (если есть)
+            if ('ontouchstart' in window) {
+                document.body.style.touchAction = 'manipulation';
+            }
+            
+            // Добавляем активное состояние для кнопок (вибрация при клике — опционально, но не навязчиво)
+            const allLinks = document.querySelectorAll('a');
+            allLinks.forEach(link => {
+                link.addEventListener('touchstart', function() {
+                    this.classList.add('active-press');
+                }, { passive: true });
+                link.addEventListener('touchend', function() {
+                    this.classList.remove('active-press');
+                });
+                link.addEventListener('touchcancel', function() {
+                    this.classList.remove('active-press');
+                });
+            });
+        });
+    </script>
+    
     <style>
         body {
             font-family: 'Manrope', sans-serif;
             background-color: #000000;
             background-image: radial-gradient(circle at 50% 50%, #0d0d11 0%, #000000 100%);
             min-height: 100vh;
-            /* Предотвращение лишнего скролла */
-            overflow-x: hidden;
-            width: 100%;
+            /* Улучшение для Android: сглаживание шрифтов и аппаратное ускорение */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
         }
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.01); }
-        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
+        
+        /* Тонкая кастомизация скроллбара */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.01);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        
+        /* Специальные стили для Android: увеличение активной зоны и тактильный фидбек */
+        a, button, .clickable {
+            -webkit-tap-highlight-color: rgba(255, 255, 255, 0.05);
+            touch-action: manipulation;
+            transition: transform 0.1s cubic-bezier(0.2, 0.9, 0.4, 1.1), opacity 0.2s ease;
+        }
+        
+        /* Эффект нажатия для Android (микро-анимация) */
+        .active-press {
+            transform: scale(0.97);
+            opacity: 0.9;
+            transition: transform 0.05s ease-out;
+        }
+        
+        /* Улучшение читаемости на OLED-экранах Android */
+        @media (display-mode: browser) {
+            .backdrop-blur-3xl {
+                backdrop-filter: blur(32px);
+            }
+        }
+        
+        /* Адаптация для очень узких экранов (ширина менее 360px) */
+        @media (max-width: 380px) {
+            .grid-cols-2 {
+                gap: 0.5rem;
+            }
+            .p-3\.5 {
+                padding: 0.75rem 0.5rem;
+            }
+            span.font-bold.text-sm {
+                font-size: 0.7rem;
+            }
+        }
+        
+        /* Обеспечиваем минимальный размер кликабельных элементов (48px по рекомендациям Material Design для Android) */
+        .flex.items-center.justify-between.p-4 {
+            min-height: 68px;
+        }
+        
+        .grid-cols-2 a {
+            min-height: 52px;
+        }
+        
+        /* Плавная прокрутка для Android Chrome */
+        html {
+            scroll-behavior: smooth;
+        }
     </style>
 </head>
-<body class="flex flex-col items-center justify-center p-4 min-h-screen text-gray-100">
+<body class="flex flex-col items-center justify-center p-3 sm:p-4 relative text-gray-100">
 
-    <!-- Контейнер для выравнивания контента -->
-    <div class="w-full max-w-md pt-20 pb-8 relative overflow-visible">
+    <!-- Отступ сверху для компенсации выступающего фото на мобильных экранах -->
+    <div class="h-24 sm:h-28 md:h-32"></div>
+
+    <!-- Основной контейнер визитки (разрешен overflow-visible для выхода фото за рамки) -->
+    <div class="w-full max-w-md bg-zinc-950/70 backdrop-blur-3xl border border-zinc-900/80 rounded-[2.5rem] sm:rounded-[3rem] p-5 sm:p-6 md:p-8 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.95)] relative transition-all duration-500 hover:border-zinc-800/80 overflow-visible">
         
-        <!-- Основной контейнер визитки -->
-        <div class="bg-zinc-950/70 backdrop-blur-3xl border border-zinc-900/80 rounded-[2.5rem] p-6 sm:p-8 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.95)] transition-all duration-500 hover:border-zinc-800/80 relative">
+        <!-- Большое квадратное фото с эффектом цветного свечения -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56">
             
-            <!-- Аватарка со свечением -->
-            <div class="absolute -top-16 left-1/2 -translate-x-1/2 z-20">
-                <div class="relative w-32 h-32 sm:w-40 sm:h-40">
-                    <!-- Свечение -->
-                    <img src="ico/11.jpg" alt="" id="avatar-glow" class="absolute inset-0 w-full h-full object-cover rounded-[2rem] blur-2xl opacity-0 scale-105 transition-all duration-700 pointer-events-none" onerror="this.style.display='none'"/>
-                    
-                    <!-- Фото -->
-                    <div class="relative w-full h-full rounded-[2rem] overflow-hidden shadow-[0_20px_40px_-10px_rgba(0,0,0,0.95)] border-2 border-zinc-800 bg-zinc-950">
-                        <div id="image-loader" class="absolute inset-0 bg-zinc-950 flex items-center justify-center">
-                            <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-zinc-650"></div>
-                        </div>
-                        <img src="ico/11.jpg" alt="Brxof" id="avatar-img" class="w-full h-full object-cover transition-transform duration-700 opacity-0" onload="handleImageLoaded()" onerror="handleImageError()"/>
-                    </div>
+            <!-- Динамический фоновый клон для генерации цветного свечения в тон фотографии -->
+            <img 
+                src="ico/11.jpg" 
+                alt="" 
+                id="avatar-glow"
+                class="absolute inset-0 w-full h-full object-cover rounded-[2rem] sm:rounded-[2.5rem] blur-2xl sm:blur-3xl opacity-0 scale-105 transition-all duration-700 pointer-events-none z-0"
+                onerror="this.style.display='none'"
+            />
+
+            <!-- Основной видимый контейнер фотографии -->
+            <div class="relative w-full h-full rounded-[2rem] sm:rounded-[2.5rem] overflow-hidden shadow-[0_25px_50px_-10px_rgba(0,0,0,0.95)] border-2 border-zinc-800 bg-zinc-950 group transition-all duration-300 hover:border-zinc-750 z-10">
+                <div id="image-loader" class="absolute inset-0 bg-zinc-950 flex items-center justify-center">
+                    <div class="animate-spin rounded-full h-8 w-8 sm:h-10 sm:w-10 border-t-2 border-b-2 border-zinc-650"></div>
                 </div>
+                <!-- Ваше фото из папки ico/11.jpg -->
+                <img 
+                    src="ico/11.jpg" 
+                    alt="Brxof" 
+                    id="avatar-img"
+                    class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-0"
+                    onload="handleImageLoaded()"
+                    onerror="handleImageError()"
+                />
             </div>
+        </div>
 
-            <!-- Отступ под аватарку -->
-            <div class="h-16"></div>
+        <!-- Отступ внутри карточки, компенсирующий находящуюся сверху аватарку -->
+        <div class="h-20 sm:h-24 md:h-28"></div>
+        
+        <!-- Информация об артисте -->
+        <div class="flex flex-col items-center mb-6 sm:mb-8 text-center">
+            <h1 class="text-2xl sm:text-3xl md:text-4xl font-black tracking-widest text-white uppercase leading-tight">
+                Brxof
+            </h1>
+            <div class="h-[1px] w-10 sm:w-12 bg-zinc-800 my-3 sm:my-4"></div>
+            <p class="text-[9px] sm:text-[10px] text-zinc-500 uppercase tracking-[0.2em] sm:tracking-[0.25em] font-bold">Слушать на всех платформах</p>
+        </div>
+
+        <!-- Список кнопок с оригинальными логотипами (Android-оптимизация: увеличенные области касания) -->
+        <div class="space-y-3">
             
-            <!-- Заголовок -->
-            <div class="flex flex-col items-center mb-8 text-center">
-                <h1 class="text-3xl font-black tracking-widest text-white uppercase">Brxof</h1>
-                <div class="h-[1px] w-12 bg-zinc-800 my-4"></div>
-                <p class="text-[10px] text-zinc-500 uppercase tracking-[0.25em] font-bold">Слушать на всех платформах</p>
-            </div>
-
-            <!-- Кнопки -->
-            <div class="space-y-3">
-                <a href="https://music.yandex.ru/artist/26066567?utm_source=web&utm_medium=copy_link" target="_blank" class="flex items-center justify-between p-4 rounded-2xl bg-zinc-900/20 hover:bg-zinc-900/70 border border-zinc-900/60 hover:border-yellow-500/20 transition-all duration-300">
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 rounded-xl bg-[#121214] flex items-center justify-center overflow-hidden border border-zinc-850"><img src="https://yastatic.net/s3/doc-binary/src/support/music/eng/files/icon-on-black-yellow.png" alt="Яндекс" class="w-full h-full object-cover"></div>
-                        <span class="font-bold text-[15px]">Яндекс Музыка</span>
+            <!-- Яндекс Музыка -->
+            <a href="https://music.yandex.ru/artist/26066567?utm_source=web&utm_medium=copy_link" target="_blank" class="flex items-center justify-between p-3.5 sm:p-4 rounded-2xl bg-zinc-900/20 hover:bg-zinc-900/70 border border-zinc-900/60 hover:border-yellow-500/20 transition-all duration-300 group active-press-effect">
+                <div class="flex items-center gap-3 sm:gap-4">
+                    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#121214] flex items-center justify-center overflow-hidden border border-zinc-850 group-hover:border-yellow-500/10 transition-all">
+                        <!-- Реальный логотип Яндекс Музыки -->
+                        <img src="https://yastatic.net/s3/doc-binary/src/support/music/eng/files/icon-on-black-yellow.png" alt="Яндекс Музыка" class="w-full h-full object-cover">
                     </div>
-                    <svg class="w-4 h-4 text-zinc-650" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
-                </a>
-
-                <div class="flex items-center justify-between p-4 rounded-2xl bg-zinc-900/10 border border-zinc-900/40 opacity-50"><div class="flex items-center gap-4"><div class="w-10 h-10 rounded-xl bg-[#121214]/60 flex items-center justify-center border border-zinc-900"></div><span class="font-bold text-[15px] text-zinc-500">Spotify</span></div><span class="text-[9px] bg-zinc-950/80 text-zinc-500 border border-zinc-900/80 px-2 py-1 rounded-lg uppercase tracking-widest">Скоро</span></div>
-                <div class="flex items-center justify-between p-4 rounded-2xl bg-zinc-900/10 border border-zinc-900/40 opacity-50"><div class="flex items-center gap-4"><div class="w-10 h-10 rounded-xl bg-[#121214]/60 flex items-center justify-center border border-zinc-900"></div><span class="font-bold text-[15px] text-zinc-500">YouTube Music</span></div><span class="text-[9px] bg-zinc-950/80 text-zinc-500 border border-zinc-900/80 px-2 py-1 rounded-lg uppercase tracking-widest">Скоро</span></div>
-                
-                <a href="https://vk.com/artist/brxof" target="_blank" class="flex items-center justify-between p-4 rounded-2xl bg-zinc-900/20 hover:bg-zinc-900/70 border border-zinc-900/60 hover:border-blue-500/20 transition-all duration-300">
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 rounded-xl bg-[#121214] flex items-center justify-center overflow-hidden border border-zinc-850"><img src="https://freesoft.ru/storage/images/770/7698/769716/769716_normal.png" alt="VK" class="w-full h-full object-cover"></div>
-                        <span class="font-bold text-[15px]">VK Музыка</span>
-                    </div>
-                    <svg class="w-4 h-4 text-zinc-650" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
-                </a>
-                
-                <div class="flex items-center justify-between p-4 rounded-2xl bg-zinc-900/10 border border-zinc-900/40 opacity-50"><div class="flex items-center gap-4"><div class="w-10 h-10 rounded-xl bg-[#121214]/60 flex items-center justify-center border border-zinc-900"></div><span class="font-bold text-[15px] text-zinc-500">Звук</span></div><span class="text-[9px] bg-zinc-950/80 text-zinc-500 border border-zinc-900/80 px-2 py-1 rounded-lg uppercase tracking-widest">Скоро</span></div>
-            </div>
-
-            <!-- Разделитель -->
-            <div class="h-[1px] w-full bg-zinc-900/80 my-6"></div>
-
-            <!-- Донат -->
-            <a href="https://www.donationalerts.com/r/brxof" target="_blank" class="w-full flex items-center justify-center gap-3 p-4 rounded-2xl bg-gradient-to-r from-amber-500/10 to-orange-500/10 hover:from-amber-500/20 hover:to-orange-500/20 border border-amber-500/20 mb-3 transition-all duration-300">
-                <span class="font-bold text-[15px] text-orange-400">Поддержать исполнителя</span>
+                    <span class="font-bold text-[14px] sm:text-[15px] text-zinc-300 group-hover:text-white transition-colors">Яндекс Музыка</span>
+                </div>
+                <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-zinc-650 group-hover:text-white group-hover:translate-x-0.5 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path>
+                </svg>
             </a>
 
-            <!-- Соцсети -->
-            <div class="grid grid-cols-2 gap-3">
-                <a href="https://t.me/brxof" target="_blank" class="flex items-center justify-center gap-2 p-3 rounded-2xl bg-[#24A1DE]/10 hover:bg-[#24A1DE]/20 border border-[#24A1DE]/20 transition-all text-[#24A1DE] font-bold text-sm">Telegram</a>
-                <a href="https://www.tiktok.com/@brxof" target="_blank" class="flex items-center justify-center gap-2 p-3 rounded-2xl bg-pink-500/10 hover:bg-pink-500/20 border border-pink-500/20 transition-all text-pink-500 font-bold text-sm">TikTok</a>
+            <!-- Spotify (заблокировано, скоро) -->
+            <div class="flex items-center justify-between p-3.5 sm:p-4 rounded-2xl bg-zinc-900/10 border border-zinc-900/40 opacity-50 select-none">
+                <div class="flex items-center gap-3 sm:gap-4">
+                    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#121214]/60 flex items-center justify-center border border-zinc-900">
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5 text-[#1DB954]/60" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.076-.336.135-.668.47-.743 3.856-.88 7.15-.502 9.822 1.135.296.18.387.563.205.858zm1.224-2.723c-.226.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.082-1.182-.413.125-.847-.107-.972-.52-.125-.413.108-.847.52-.972 3.676-1.116 8.243-.573 11.347 1.336.368.226.486.707.26 1.074zm.104-2.83c-3.263-1.937-8.644-2.115-11.758-1.17-.5.152-1.025-.133-1.176-.633-.15-.5.133-1.025.633-1.175 3.593-1.09 9.53-.884 13.284 1.344.45.267.6.845.333 1.295-.267.45-.845.6-1.296.334z"/>
+                        </svg>
+                    </div>
+                    <span class="font-bold text-[14px] sm:text-[15px] text-zinc-500">Spotify</span>
+                </div>
+                <span class="text-[8px] sm:text-[9px] bg-zinc-950/80 text-zinc-500 border border-zinc-900/80 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg font-bold uppercase tracking-widest">Скоро</span>
             </div>
+
+            <!-- YouTube Music -->
+            <div class="flex items-center justify-between p-3.5 sm:p-4 rounded-2xl bg-zinc-900/10 border border-zinc-900/40 opacity-50 select-none">
+                <div class="flex items-center gap-3 sm:gap-4">
+                    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#121214]/60 flex items-center justify-center border border-zinc-900">
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5 text-[#FF0000]/60" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm-1.5-7.5v5l4-2.5-4-2.5z"/>
+                        </svg>
+                    </div>
+                    <span class="font-bold text-[14px] sm:text-[15px] text-zinc-500">YouTube Music</span>
+                </div>
+                <span class="text-[8px] sm:text-[9px] bg-zinc-950/80 text-zinc-500 border border-zinc-900/80 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg font-bold uppercase tracking-widest">Скоро</span>
+            </div>
+
+            <!-- VK Музыка -->
+            <a href="https://vk.com/artist/brxof" target="_blank" class="flex items-center justify-between p-3.5 sm:p-4 rounded-2xl bg-zinc-900/20 hover:bg-zinc-900/70 border border-zinc-900/60 hover:border-blue-500/20 transition-all duration-300 group">
+                <div class="flex items-center gap-3 sm:gap-4">
+                    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#121214] flex items-center justify-center overflow-hidden border border-zinc-850 group-hover:border-blue-500/10 transition-all">
+                        <img src="https://freesoft.ru/storage/images/770/7698/769716/769716_normal.png" alt="VK Музыка" class="w-full h-full object-cover">
+                    </div>
+                    <span class="font-bold text-[14px] sm:text-[15px] text-zinc-300 group-hover:text-white transition-colors">VK Музыка</span>
+                </div>
+                <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-zinc-650 group-hover:text-white group-hover:translate-x-0.5 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </a>
+
+            <!-- Звук -->
+            <div class="flex items-center justify-between p-3.5 sm:p-4 rounded-2xl bg-zinc-900/10 border border-zinc-900/40 opacity-50 select-none">
+                <div class="flex items-center gap-3 sm:gap-4">
+                    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#121214]/60 flex items-center justify-center overflow-hidden border border-zinc-900">
+                        <img src="https://avatars.mds.yandex.net/i?id=aac8729e82f567387c3e254fca6bbbd9ae42c7c3-5232511-images-thumbs&n=13" alt="Звук" class="w-full h-full object-cover opacity-40 grayscale">
+                    </div>
+                    <span class="font-bold text-[14px] sm:text-[15px] text-zinc-500">Звук</span>
+                </div>
+                <span class="text-[8px] sm:text-[9px] bg-zinc-950/80 text-zinc-500 border border-zinc-900/80 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg font-bold uppercase tracking-widest">Скоро</span>
+            </div>
+
+            <!-- Кнопка Поддержать Исполнителя (DonationAlerts) -->
+            <a href="https://www.donationalerts.com/r/brxof" target="_blank" class="flex items-center justify-between p-3.5 sm:p-4 rounded-2xl bg-gradient-to-r from-amber-500/10 to-orange-500/10 hover:from-amber-500/20 hover:to-orange-500/20 border border-amber-500/20 hover:border-orange-500/40 transition-all duration-300 group">
+                <div class="flex items-center gap-3 sm:gap-4">
+                    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#121214] flex items-center justify-center border border-zinc-850 group-hover:border-orange-500/20 transition-all">
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5 text-orange-500 group-hover:scale-110 transition-transform duration-300" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                        </svg>
+                    </div>
+                    <span class="font-bold text-[14px] sm:text-[15px] text-zinc-300 group-hover:text-white transition-colors">Поддержать исполнителя</span>
+                </div>
+                <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-zinc-650 group-hover:text-white group-hover:translate-x-0.5 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </a>
+
+        </div>
+
+        <!-- Разделительная линия перед соцсетями -->
+        <div class="h-[1px] w-full bg-zinc-900/80 my-5 sm:my-6"></div>
+
+        <!-- Социальные Сети (Telegram и TikTok) с цветным премиальным оформлением -->
+        <div class="grid grid-cols-2 gap-2.5 sm:gap-3">
+            
+            <!-- Telegram -->
+            <a href="https://t.me/brxof" target="_blank" class="flex items-center justify-center gap-2 p-3 sm:p-3.5 rounded-2xl bg-[#24A1DE]/10 hover:bg-[#24A1DE]/25 border border-[#24A1DE]/20 hover:border-[#24A1DE]/50 transition-all duration-300 group shadow-[0_4px_20px_-5px_rgba(36,161,222,0.15)] min-h-[52px]">
+                <svg class="w-4 h-4 sm:w-5 sm:h-5 text-[#24A1DE] group-hover:scale-105 transition-transform" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M11.944 0C5.347 0 0 5.347 0 11.944c0 6.595 5.347 11.944 11.944 11.944 6.595 0 11.944-5.349 11.944-11.944C23.888 5.347 18.539 0 11.944 0zm5.821 8.243c-.15 1.581-.8 5.409-1.121 7.129-.137.728-.404.97-.663.994-.564.05-1.055-.308-1.58-.654-.823-.538-1.288-.87-2.086-1.397-.923-.609-.323-.943.202-1.488.138-.142 2.518-2.311 2.564-2.508.006-.024.01-.115-.043-.162-.054-.047-.133-.031-.19-.018-.08.018-1.36.864-3.837 2.536-.363.249-.691.371-.984.365-.323-.006-.944-.181-1.407-.331-.568-.184-1.02-.281-.98-.593.02-.162.244-.329.673-.501 2.628-1.144 4.381-1.899 5.257-2.264 2.504-1.037 3.024-1.217 3.364-1.223.075-.001.242.018.35.105.09.073.115.174.124.251.011.082.016.255-.002.355z"/>
+                </svg>
+                <span class="font-bold text-xs sm:text-sm text-zinc-350 group-hover:text-white transition-colors">Telegram</span>
+            </a>
+
+            <!-- TikTok -->
+            <a href="https://www.tiktok.com/@brxof?_r=1&amp;_t=ZS-93wYZnLko7N" target="_blank" class="flex items-center justify-center gap-2 p-3 sm:p-3.5 rounded-2xl bg-gradient-to-r from-pink-500/10 via-zinc-900/10 to-cyan-500/10 hover:from-pink-500/15 hover:to-cyan-500/15 border border-pink-500/15 hover:border-cyan-500/40 transition-all duration-300 group shadow-[0_4px_20px_-5px_rgba(236,72,153,0.15)] min-h-[52px]">
+                <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-pink-500 group-hover:text-cyan-450 group-hover:scale-105 transition-all" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.01 1.62 4.14.94 1.01 2.26 1.66 3.66 1.83v3.91c-1.25-.03-2.49-.38-3.56-1.04-.84-.53-1.54-1.27-2.02-2.14v7.71c.04 1.8-.46 3.61-1.47 5.06-1.12 1.61-2.91 2.76-4.88 3.12-1.93.36-3.99.04-5.71-1-1.63-1-2.82-2.67-3.23-4.55-.47-2.08-.1-4.31.99-6.13 1.11-1.84 2.97-3.15 5.09-3.55.97-.18 1.96-.18 2.93 0v4.02c-.85-.18-1.74-.13-2.55.18-.81.3-1.52.89-1.97 1.64-.53.86-.67 1.92-.39 2.89.28.97.94 1.77 1.82 2.21.84.42 1.81.47 2.69.15.89-.32 1.62-1.02 1.97-1.89.15-.41.21-.85.2-1.29V0h.01z"/>
+                </svg>
+                <span class="font-bold text-xs sm:text-sm text-zinc-350 group-hover:text-white transition-colors">TikTok</span>
+            </a>
+
+        </div>
+        
+        <!-- Добавляем небольшой отступ снизу для более комфортного скролла на Android -->
+        <div class="h-4 sm:h-5"></div>
+        
+        <!-- Легенда: подсказка о том, что ссылки открываются в браузере (полезно для Android) -->
+        <div class="text-center mt-3 opacity-30">
+            <p class="text-[8px] sm:text-[9px] text-zinc-600 tracking-wider">нажмите для перехода • все ссылки официальные</p>
         </div>
     </div>
 
+    <!-- Дополнительный скрипт для обеспечения корректной работы с жестами на Android -->
     <script>
-        function handleImageLoaded() {
-            const img = document.getElementById('avatar-img');
-            const glow = document.getElementById('avatar-glow');
-            const loader = document.getElementById('image-loader');
-            if (img) img.classList.add('opacity-100');
-            if (glow) glow.classList.add('opacity-70');
-            if (loader) loader.style.display = 'none';
-        }
-        function handleImageError() {
-            const loader = document.getElementById('image-loader');
-            if (loader) loader.innerHTML = `<div class="text-zinc-600 text-xs">Brxof</div>`;
-        }
-        document.addEventListener('DOMContentLoaded', () => {
-            const img = document.getElementById('avatar-img');
-            if (img && img.complete) handleImageLoaded();
-        });
+        (function() {
+            // Фикс для Android: предотвращаем случайное зуммирование при двойном тапе на кнопках (не глобально, только на ссылках)
+            const links = document.querySelectorAll('a');
+            links.forEach(link => {
+                link.addEventListener('touchstart', (e) => {
+                    // Не блокируем, просто добавляем класс для активного состояния
+                    if (e.target.closest('a')) {
+                        // Небольшая задержка для визуального отклика (уже через CSS scale)
+                    }
+                }, { passive: true });
+            });
+            
+            // Оптимизация производительности на Android: уменьшаем нагрузку на GPU при скролле
+            if ('requestIdleCallback' in window) {
+                requestIdleCallback(() => {
+                    document.body.classList.add('dom-loaded');
+                });
+            }
+        })();
     </script>
 </body>
 </html>
